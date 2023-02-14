@@ -1,14 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity } from 'react-native';
+import MainContainer from './navigation/MainContainer';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
 
 const styles = StyleSheet.create({
   container: {
@@ -18,3 +12,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+
+const App = () => {
+  return (
+    // <View style={styles.container}>
+    //   <MainContainer />
+    // </View>
+    <MainContainer />
+  );
+};
+
+export default App;
