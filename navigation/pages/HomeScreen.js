@@ -44,7 +44,7 @@ const HomeScreen = ({ navigation, route }) => {
                     <Note key={index} note={note} index={index} removeNote={removeNote} />
                 ))}
                 {/* on go back */}
-                <Button title='Add note' onPress={() => navigation.navigate('AddNote', { onGoBack: addNote })} />
+                {/* <Button title='Add note' onPress={() => navigation.navigate('AddNote', { onGoBack: addNote })} /> */}
             </View>
 
             <TextInput
