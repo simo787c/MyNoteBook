@@ -4,17 +4,9 @@ import { StyleSheet, View, Text, TextInput, TouchableOpacity } from 'react-nativ
 import MainContainer from './navigation/MainContainer';
 
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
-
 
 const App = () => {
+  //getCities()
   return (
     // <View style={styles.container}>
     //   <MainContainer />
@@ -24,3 +16,13 @@ const App = () => {
 };
 
 export default App;
+
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
