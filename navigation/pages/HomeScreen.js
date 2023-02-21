@@ -15,6 +15,7 @@ import firebase from '../../component/firebase';
 
 const HomeScreen = ({ navigation, route }) => {
 
+    //for top right button
     React.useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () => (
