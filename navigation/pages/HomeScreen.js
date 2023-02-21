@@ -14,18 +14,21 @@ import firebase from '../../component/firebase';
 }; */
 
 const HomeScreen = ({ navigation, route }) => {
-    //{/* on go back */}
-    //    React.useEffect(() => {
-    //        if (route.params?.note) {
-    //            setNote(note.concat(route.params.note));
-    //        }
-    //    }, [route.params?.note]);
+
+    React.useLayoutEffect(() => {
+        navigation.setOptions({
+            headerRight: () => (
+                <Button title='Add Note' onPress={() => navigation.navigate('AddNote', { counter: counter, addNote: addNote })} />
+            ),
+        });
+    });
 
     const [counter, setCounter] = useState(0);
     const [notes, setNotes] = useState([]);
-    //const [note, setNote] = useState('');
 
     const db = getFirestore(firebase);
+
+    const srcCol = 'notes';
 
     //use effect ran once per re-render
     //only for initializing data once per re-render
@@ -36,21 +39,24 @@ const HomeScreen = ({ navigation, route }) => {
     //initialize all notes from collection
     //insert notes from collection into local list setNotes (useState)
     async function initializeData() {
-        const noteCollection = collection(db, 'notes');
-        const noteSnapshot = await getDocs(noteCollection);
-        const list = noteSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        const collectionRef = collection(db, srcCol);
+        const snapshot = await getDocs(collectionRef);
+        const list = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
         setNotes([...list]);
     }
 
     const addNote = async (title, note) => {
+        let lastEdit = new Date().toLocaleString();
         //save note and previous notes, then reset note
         //firebase add, collection reference, db instance, collection name, custom fields, docRef for fetching firestore id
         try {
             const docRef = await addDoc(collection(db, "notes"), {
                 title: title,
-                note: note
+                note: note,
+                lastEdit: lastEdit
             });
-            setNotes([...notes, { id: docRef.id, title, note }]);
+            setNotes([...notes, { id: docRef.id, title, note, lastEdit }]);
+            //keep count of total notes for default naming
             setCounter(counter + 1);
         } catch (error) {
             console.error(error);
@@ -65,15 +71,17 @@ const HomeScreen = ({ navigation, route }) => {
 
     const editNote = async (id, title, note) => {
         //find id of edited note, then set new data
+        let lastEdit = new Date().toLocaleString();
         let tempNotes = [...notes];
         let index = tempNotes.findIndex(n => n.id === id);
-        tempNotes[index] = { id, title, note };
+        tempNotes[index] = { id, title, note, lastEdit };
         setNotes(tempNotes);
 
         //firebase edit, essentially like firebase add
         await setDoc(doc(db, "notes", id), {
             title: title,
-            note: note
+            note: note,
+            lastEdit: lastEdit
         });
     };
 
@@ -81,6 +89,7 @@ const HomeScreen = ({ navigation, route }) => {
         <TouchableOpacity onPress={() => navigation.navigate('AddNote', { note: item, editNote: editNote })}>
             <View>
                 <View>
+                    <Text>{item.lastEdit}</Text>
                     <Text>{item.title}</Text>
                     <Text numberOfLines={3} ellipsizeMode="tail">{item.note}</Text>
                 </View>
